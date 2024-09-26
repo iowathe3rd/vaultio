@@ -3,26 +3,26 @@
 import { FileDetails, ShareInput } from "@/components/ActionsModalContent";
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { actionsDropdownItems } from "@/constants";
 import {
-    deleteFile,
-    renameFile,
-    updateFileUsers,
+  deleteFile,
+  renameFile,
+  updateFileUsers,
 } from "@/lib/actions/file.actions";
 import { constructDownloadUrl } from "@/lib/utils";
 import Image from "next/image";
