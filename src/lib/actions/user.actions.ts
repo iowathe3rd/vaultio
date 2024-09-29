@@ -9,6 +9,17 @@ import { redirect } from "next/navigation";
 import { ID, Query } from "node-appwrite";
 
 /**
+ * Универсальный обработчик ошибок.
+ * Логирует ошибку и выбрасывает её дальше.
+ * @param error Объект ошибки.
+ * @param message Сообщение для логирования.
+ */
+const handleError = (error: unknown, message: string) => {
+  console.error(message, error);
+  throw new Error(message);
+};
+
+/**
  * Получает пользователя из коллекции по email.
  * @param email Email пользователя.
  * @returns Документ пользователя или null, если пользователь не найден.
@@ -29,23 +40,14 @@ const getUserByEmail = async (email: string) => {
 };
 
 /**
- * Универсальный обработчик ошибок.
- * Логирует ошибку и выбрасывает её дальше.
- * @param error Объект ошибки.
- * @param message Сообщение для логирования.
- */
-const handleError = (error: unknown, message: string) => {
-  console.error(message, error);
-  throw new Error(message);
-};
-
-/**
  * Отправляет OTP на email пользователя.
  * @param email Email для отправки OTP.
  * @returns Идентификатор пользователя.
  */
 export const sendEmailOTP = async ({ email }: { email: string }) => {
   try {
+    if (!email) throw new Error("Email is required for sending OTP");
+
     const { account } = await createAdminClient();
     const session = await account.createEmailToken(ID.unique(), email);
 
@@ -73,9 +75,10 @@ export const createAccount = async ({
   email: string;
 }) => {
   try {
+    if (!fullName || !email) throw new Error("Full name and email are required");
+
     const existingUser = await getUserByEmail(email);
 
-    // Создать аккаунт, если пользователь не найден
     if (!existingUser) {
       const accountId = await sendEmailOTP({ email });
       if (!accountId) throw new Error("Failed to send an OTP");
@@ -116,6 +119,7 @@ export const verifySecret = async ({
   password: string;
 }) => {
   try {
+    if (!accountId || !password) throw new Error("Account ID and password are required");
     const { account } = await createAdminClient();
     const session = await account.createSession(accountId, password);
 
@@ -181,6 +185,8 @@ export const signOutUser = async () => {
  */
 export const signInUser = async ({ email }: { email: string }) => {
   try {
+    if (!email) throw new Error("Email is required for signing in");
+
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
